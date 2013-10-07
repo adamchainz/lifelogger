@@ -12,6 +12,7 @@ from oauth2client import client as oa2c_client
 from oauth2client import tools as oa2c_tools
 
 
+DATA_PATH = os.path.expanduser("~/.lifelogger/")
 CLIENT_SECRETS_PATH = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
 
 
@@ -39,7 +40,7 @@ def connect():
     # If the credentials don't exist or are invalid run through the native client
     # flow. The Storage object will ensure that if successful the good
     # credentials will get written back to the file.
-    storage = oa2c_file.Storage('sample.dat')
+    storage = oa2c_file.Storage(os.path.join(DATA_PATH, 'google_auth.json'))
     credentials = storage.get()
     if credentials is None or credentials.invalid:
         credentials = oa2c_tools.run_flow(FLOW, storage, flags)
