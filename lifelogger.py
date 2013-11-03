@@ -12,10 +12,11 @@ def main(argv):
         parser.print_help()
         return True
 
-    args = parser.parse_args(sys.argv[1:])
+    kwargs = dict(parser.parse_args(sys.argv[1:])._get_kwargs())
+    func = kwargs.pop('func')
 
     try:
-        return args.func(args)
+        return func(**kwargs)
     except oa2c_client.AccessTokenRefreshError:
         print ("The credentials have been revoked or expired, please re-run"
                "the application to re-authorize")

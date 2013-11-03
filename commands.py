@@ -8,13 +8,11 @@ parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers()
 
 
-def quickadd(args):
+def quickadd(text):
     import connection
     from config import config
 
     service = connection.connect()
-
-    text = args.text
 
     # Double up single-time events to be 0-length
     match = re.match(r'^\d\d:\d\d\b', text)
