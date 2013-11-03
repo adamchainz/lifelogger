@@ -1,15 +1,21 @@
 #!/usr/bin/env python
 # coding=utf-8
+import httplib2
 import sys
 
 from oauth2client import client as oa2c_client
 
 import connection
 from config import config
+from commands import parser
 
 
 def main(argv):
-    service = connection.connect()
+    try:
+        service = connection.connect()
+    except httplib2.ServerNotFoundError:
+        sys.stderr.write("Server not found\n")
+        return False
 
     if 'calendar_id' not in config:
         all_cals = service.calendarList().list().execute()['items']
@@ -25,11 +31,17 @@ def main(argv):
         config.save()
 
     try:
-        import ipdb; ipdb.set_trace()
+        if len(sys.argv) <= 1:
+            parser.print_help()
+            return True
+
+        args = parser.parse_args(sys.argv[1:])
+        return args.func(service, config, args)
     except oa2c_client.AccessTokenRefreshError:
         print ("The credentials have been revoked or expired, please re-run"
                "the application to re-authorize")
 
 
 if __name__ == '__main__':
-    main(sys.argv)
+    success = main(sys.argv)
+    sys.exit(0 if success else 1)

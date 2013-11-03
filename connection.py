@@ -11,10 +11,9 @@ from oauth2client import file as oa2c_file
 from oauth2client import client as oa2c_client
 from oauth2client import tools as oa2c_tools
 
+from config import DATA_PATH
 
-DATA_PATH = os.path.expanduser("~/.lifelogger/")
 CLIENT_SECRETS_PATH = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
-
 
 # Parser for command-line arguments - only used to get defaults
 parser = argparse.ArgumentParser(
@@ -30,7 +29,7 @@ FLOW = oa2c_client.flow_from_clientsecrets(
         'https://www.googleapis.com/auth/calendar',
         'https://www.googleapis.com/auth/calendar.readonly',
     ],
-    message=oa2c_tools.message_if_missing(CLIENT_SECRETS_PATH)
+    message="Error - client_secrets.json file missing."
 )
 
 
