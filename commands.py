@@ -16,9 +16,9 @@ def quickadd(text):
     service = connection.connect()
 
     # Double up single-time events to be 0-length
-    match = re.match(r'^\d\d:\d\d\b', text)
+    match = re.match(r'^\d\d:\d\d ', text)
     if match:
-        text = match.group(0) + '-' + text
+        text = match.group(0)[:-1] + '-' + text
 
     # Make request
     print "Quick add >>", text
