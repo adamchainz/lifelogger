@@ -5,13 +5,12 @@ Handles connecting to Google API and authenticating.
 import argparse
 import httplib2
 import os
+import sys
 
 from apiclient import discovery as apc_discovery
 from oauth2client import file as oa2c_file
 from oauth2client import client as oa2c_client
 from oauth2client import tools as oa2c_tools
-
-from config import DATA_PATH
 
 CLIENT_SECRETS_PATH = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
 
@@ -34,6 +33,8 @@ FLOW = oa2c_client.flow_from_clientsecrets(
 
 
 def connect():
+    from config import config, DATA_PATH
+
     flags = parser.parse_args([])
 
     # If the credentials don't exist or are invalid run through the native client
@@ -50,6 +51,23 @@ def connect():
     http = credentials.authorize(http)
 
     # Construct the service object for the interacting with the Calendar API.
-    service = apc_discovery.build('calendar', 'v3', http=http)
+    try:
+        service = apc_discovery.build('calendar', 'v3', http=http)
+    except httplib2.ServerNotFoundError:
+        sys.stderr.write("Error: server not found - are you connected to the internet?\n")
+        sys.exit()
+
+    if 'calendar_id' not in config:
+        all_cals = service.calendarList().list().execute()['items']
+        primary_cal = [cal for cal in all_cals
+                       if 'primary' in cal and cal['primary']][0]
+        config['calendar_id'] = primary_cal['id']
+        config.save()
+
+    if 'timezone' not in config:
+        settings = service.settings().list().execute()['items']
+        settings = dict([(item['id'], item['value']) for item in settings])
+        config['timezone'] = settings.get('timezone', "Europe/London")
+        config.save()
 
     return service

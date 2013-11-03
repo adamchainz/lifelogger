@@ -8,7 +8,12 @@ parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers()
 
 
-def quickadd(service, config, args):
+def quickadd(args):
+    import connection
+    from config import config
+
+    service = connection.connect()
+
     text = args.text
 
     # Double up single-time events to be 0-length
