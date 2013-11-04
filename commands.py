@@ -9,23 +9,23 @@ parser = argparse.ArgumentParser()
 subparsers = parser.add_subparsers()
 
 
-def quickadd(text):
+def quickadd(summary):
     import connection
     from config import config
 
     service = connection.connect()
 
     # Double up single-time events to be 0-length
-    match = re.match(r'^\d\d:\d\d ', text)
+    match = re.match(r'^\d\d:\d\d ', summary)
     if match:
-        text = match.group(0)[:-1] + '-' + text
+        summary = match.group(0)[:-1] + '-' + summary
 
     # Make request
-    print "Quick add >>", text
+    print "Quick add >>", summary
 
     result = service.events().quickAdd(
         calendarId=config['calendar_id'],
-        text=text
+        summary=summary
     ).execute()
 
     if result['status'] == 'confirmed':
@@ -36,11 +36,11 @@ def quickadd(text):
         return False
 
 parser_quickadd = subparsers.add_parser('quickadd')
-parser_quickadd.add_argument('text')
+parser_quickadd.add_argument('summary')
 parser_quickadd.set_defaults(func=quickadd)
 
 
-def now(text, offset=0):
+def now(summary, offset=0):
     import connection
     from config import config
 
@@ -48,12 +48,12 @@ def now(text, offset=0):
 
     when = datetime.now() + timedelta(minutes=offset)
 
-    print "Adding 0-minute event >>", text
+    print "Adding 0-minute event >>", summary
 
     result = service.events().insert(
         calendarId=config['calendar_id'],
         body={
-            'summary': text,
+            'summary': summary,
             'start': {
                 'dateTime': when.isoformat(),
                 'timeZone': config['timezone']
@@ -74,5 +74,5 @@ def now(text, offset=0):
 
 parser_now = subparsers.add_parser('now')
 parser_now.add_argument('offset', type=int, default=0, nargs='?')
-parser_now.add_argument('text')
+parser_now.add_argument('summary')
 parser_now.set_defaults(func=now)
