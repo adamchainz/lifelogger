@@ -40,26 +40,27 @@ parser_quickadd.add_argument('summary')
 parser_quickadd.set_defaults(func=quickadd)
 
 
-def now(summary, offset=0):
+def now(summary, offset=0, duration=0):
     import connection
     from config import config
 
     service = connection.connect()
 
-    when = datetime.now() + timedelta(minutes=offset)
+    start = datetime.now() + timedelta(minutes=offset)
+    end = start + timedelta(minutes=duration)
 
-    print "Adding 0-minute event >>", summary
+    print "Adding %i-minute event >> %s" % (duration, summary)
 
     result = service.events().insert(
         calendarId=config['calendar_id'],
         body={
             'summary': summary,
             'start': {
-                'dateTime': when.isoformat(),
+                'dateTime': start.isoformat(),
                 'timeZone': config['timezone']
             },
             'end': {
-                'dateTime': when.isoformat(),
+                'dateTime': end.isoformat(),
                 'timeZone': config['timezone']
             }
         }
@@ -74,5 +75,6 @@ def now(summary, offset=0):
 
 parser_now = subparsers.add_parser('now')
 parser_now.add_argument('offset', type=int, default=0, nargs='?')
+parser_now.add_argument('-d', '--duration', type=int)
 parser_now.add_argument('summary')
 parser_now.set_defaults(func=now)
