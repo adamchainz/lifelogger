@@ -1,5 +1,6 @@
 # coding=utf-8
 import argparse
+import dateutil.parser
 import re
 import sys
 from datetime import datetime, timedelta
@@ -120,3 +121,51 @@ parser_for = subparsers.add_parser('for')
 parser_for.add_argument('duration', type=int)
 parser_for.add_argument('summary')
 parser_for.set_defaults(func=for_command)
+
+
+def add_command(summary, when=None, duration=0):
+    if when is None:
+        when = datetime.now()
+    else:
+        when = dateutil.parser.parse(when)
+
+    from config import config
+
+    service = connection.connect()
+
+    times = [
+        when,
+        when + timedelta(minutes=duration)
+    ]
+    times.sort()
+    start, end = times
+
+    print "Adding %i-minute event at %s >> %s" % (abs(duration), when, summary)
+
+    result = service.events().insert(
+        calendarId=config['calendar_id'],
+        body={
+            'summary': summary,
+            'start': {
+                'dateTime': start.isoformat(),
+                'timeZone': config['timezone']
+            },
+            'end': {
+                'dateTime': end.isoformat(),
+                'timeZone': config['timezone']
+            }
+        }
+    ).execute()
+
+    if result['status'] == 'confirmed':
+        print "Added! Link: ", result['htmlLink']
+        return True
+    else:
+        sys.stdout.write("Failed :( - status %s\n" % result['status'])
+        return False
+
+
+parser_add = subparsers.add_parser('add')
+parser_add.add_argument('-w', '--when', default=None)
+parser_add.add_argument('summary')
+parser_add.set_defaults(func=add_command)
