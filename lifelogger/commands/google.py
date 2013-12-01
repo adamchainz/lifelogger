@@ -15,6 +15,8 @@ from .parser import subparsers
 
 
 def quickadd(summary):
+    summary = ' '.join(summary)
+
     service = connect()
 
     # Double up single-time events to be 0-length
@@ -27,7 +29,7 @@ def quickadd(summary):
 
     result = service.events().quickAdd(
         calendarId=config['calendar_id'],
-        summary=summary
+        text=summary
     ).execute()
 
     if result['status'] == 'confirmed':
@@ -43,7 +45,8 @@ quickadd.parser = subparsers.add_parser(
 )
 quickadd.parser.add_argument(
     'summary',
-    help="The summary for the event."
+    help="The summary for the event.",
+    nargs='*'
 )
 quickadd.parser.set_defaults(func=quickadd)
 
