@@ -45,9 +45,10 @@ class Event(Model):
             (('start'), False),
             (('end'), False),
         )
+        order_by = ('start',)
 
     def __unicode__(self):
-        return u"{} til {}, \"{}\"".format(
+        return u"{}    {}    {}".format(
             self.start,
             self.end,
             self.summary,

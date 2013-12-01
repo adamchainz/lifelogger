@@ -195,6 +195,9 @@ def download(reset=None):
             f.write(chunk)
 
     print "Download successful!"
+
+    make_db()
+
     return True
 
 download.parser = subparsers.add_parser('download')
@@ -228,6 +231,8 @@ def make_db():
         Event.select().count()
     )
 
+    return True
+
 make_db.parser = subparsers.add_parser('make_db')
 make_db.parser.set_defaults(func=make_db)
 
@@ -250,8 +255,11 @@ def list_command(filter_re):
     from .analyzer import Event, regexp
 
     events = Event.select().where(regexp(Event.summary, filter_re))
+
     for event in events:
         print event
+
+    return True
 
 list_command.parser = subparsers.add_parser('list')
 list_command.parser.add_argument('filter_re', nargs="+", type=unicode)
