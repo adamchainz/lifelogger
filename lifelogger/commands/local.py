@@ -46,7 +46,7 @@ download.parser.set_defaults(func=download)
 
 
 def make_db():
-    from ..analyzer import Event
+    from ..database import Event
 
     print "Converting iCal file into sqlite database..."
 
@@ -79,7 +79,7 @@ make_db.parser.set_defaults(func=make_db)
 
 def shell():
     from datetime import datetime, date
-    from ..analyzer import Event, regexp
+    from ..database import Event, regexp
 
     [datetime, date, Event, regexp]
 
@@ -92,7 +92,7 @@ shell.parser.set_defaults(func=shell)
 
 def list_command(filter_re):
     filter_re = ' '.join(filter_re)
-    from ..analyzer import Event, regexp
+    from ..database import Event, regexp
 
     events = Event.select().where(regexp(Event.summary, filter_re))
 
