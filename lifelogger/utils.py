@@ -1,6 +1,7 @@
 # coding=utf-8
 import re
 import sys
+from datetime import datetime
 
 from termcolor import colored
 
@@ -22,3 +23,10 @@ def highlight_tags(string):
         string,
         flags=re.MULTILINE
     )
+
+
+def nice_format(var):
+    if isinstance(var, datetime):
+        return var.isoformat()
+    else:
+        return str(var)

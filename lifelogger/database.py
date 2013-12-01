@@ -74,6 +74,15 @@ class Event(Model):
             highlight_tags(self.summary)
         )
 
+    @property
+    def kg(self):
+        try:
+            return float(
+                re.search('([0-9.]+)kg\\b', self.summary).group(1)
+            )
+        except ValueError:
+            raise ValueError("Event {} has no kg variable".format(self))
+
 
 def normalized(dt):
     # Fix the broken API for ical events - dt may be a date or datetime, so

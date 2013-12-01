@@ -3,9 +3,11 @@
 All commands that create & use the local copies of the Google Calendar data.
 """
 import requests
+
 from icalendar import Calendar
 
 from ..config import config, ICAL_PATH
+from ..utils import nice_format
 
 from .parser import subparsers
 
@@ -104,3 +106,30 @@ def list_command(filter_re):
 list_command.parser = subparsers.add_parser('list')
 list_command.parser.add_argument('filter_re', nargs="+", type=unicode)
 list_command.parser.set_defaults(func=list_command)
+
+
+def tsv(filter_re, varnames=None):
+    filter_re = ' '.join(filter_re)
+
+    if varnames is None:
+        varnames = "start,end,summary"
+
+    varnames = varnames.split(',')
+
+    from ..database import Event, regexp
+
+    events = Event.select().where(regexp(Event.summary, filter_re))
+
+    # Header
+    print "\t".join(varnames)
+
+    # Data
+    for event in events:
+        print '\t'.join([
+            nice_format(getattr(event, varname)) for varname in varnames
+        ])
+
+tsv.parser = subparsers.add_parser('tsv')
+tsv.parser.add_argument('filter_re', nargs="+", type=unicode)
+tsv.parser.add_argument('-v', '--varnames', nargs="?", type=unicode)
+tsv.parser.set_defaults(func=tsv)
