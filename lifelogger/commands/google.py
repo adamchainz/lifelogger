@@ -110,6 +110,8 @@ now.parser.set_defaults(func=now)
 
 
 def for_command(duration, summary):
+    summary = ' '.join(summary)
+
     service = connect()
 
     times = [
@@ -153,12 +155,15 @@ for_command.parser.add_argument(
 )
 for_command.parser.add_argument(
     'summary',
-    help="The summary for the event."
+    help="The summary for the event.",
+    nargs='*'
 )
 for_command.parser.set_defaults(func=for_command)
 
 
 def add(summary, start=None, end=None, duration=None):
+    summary = ' '.join(summary)
+
     if start is None:
         start = datetime.now()
     else:
@@ -229,7 +234,8 @@ add.parser.add_argument(
 )
 add.parser.add_argument(
     'summary',
-    help="The summary for the event."
+    help="The summary for the event.",
+    nargs='*'
 )
 add.parser.set_defaults(func=add)
 
