@@ -42,8 +42,11 @@ parser_quickadd.add_argument('summary')
 parser_quickadd.set_defaults(func=quickadd)
 
 
-def now(summary, offset=0, duration=0):
+def now(summary, offset=0, duration=None):
     from config import config
+
+    if duration is None:
+        duration = 0
 
     service = connection.connect()
 
