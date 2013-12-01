@@ -1,4 +1,5 @@
 # coding=utf-8
+import re
 from datetime import datetime, time
 
 from peewee import CharField, DateTimeField, Expression, Model, SqliteDatabase
@@ -11,13 +12,24 @@ OP_REGEXP = 'regexp'
 
 
 def regexp(lhs, rhs):
-    return Expression(lhs, 'OP_REGEXP', rhs)
+    return Expression(lhs, 'regexp', rhs)
 
 SqliteDatabase.register_ops({OP_REGEXP: 'REGEXP'})
 
 
 # Create database reference
 db = SqliteDatabase(DB_PATH)
+
+
+# Define REGEXP function in sqlite database connection
+conn = db.get_conn()
+
+
+def regex_matches(regex, string):
+    return bool(re.search(regex, string, flags=re.IGNORECASE))
+
+
+conn.create_function('REGEXP', 2, regex_matches)
 
 
 # Models

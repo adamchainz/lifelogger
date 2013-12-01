@@ -244,3 +244,15 @@ def shell():
 shell.parser = subparsers.add_parser('shell')
 shell.parser.set_defaults(func=shell)
 
+
+def list_command(filter_re):
+    filter_re = ' '.join(filter_re)
+    from .analyzer import Event, regexp
+
+    events = Event.select().where(regexp(Event.summary, filter_re))
+    for event in events:
+        print event
+
+list_command.parser = subparsers.add_parser('list')
+list_command.parser.add_argument('filter_re', nargs="+", type=unicode)
+list_command.parser.set_defaults(func=list_command)
