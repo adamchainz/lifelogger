@@ -2,7 +2,7 @@
 import json
 import os
 
-DATA_PATH = os.path.expanduser("~/.lifelogger/")
+DATA_PATH = os.path.expanduser("~/.config/lifelogger/")
 CONFIG_PATH = os.path.join(DATA_PATH, "config.json")
 
 
