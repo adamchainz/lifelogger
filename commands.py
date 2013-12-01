@@ -6,6 +6,7 @@ import sys
 from datetime import datetime, timedelta
 
 import connection
+from config import config
 
 
 parser = argparse.ArgumentParser()
@@ -13,8 +14,6 @@ subparsers = parser.add_subparsers()
 
 
 def quickadd(summary):
-    from config import config
-
     service = connection.connect()
 
     # Double up single-time events to be 0-length
@@ -43,8 +42,6 @@ parser_quickadd.set_defaults(func=quickadd)
 
 
 def now(summary, offset=0, duration=None):
-    from config import config
-
     if duration is None:
         duration = 0
 
@@ -85,8 +82,6 @@ parser_now.set_defaults(func=now)
 
 
 def for_command(duration, summary):
-    from config import config
-
     service = connection.connect()
 
     times = [
@@ -131,8 +126,6 @@ def add_command(summary, when=None, duration=0):
         when = datetime.now()
     else:
         when = dateutil.parser.parse(when)
-
-    from config import config
 
     service = connection.connect()
 
