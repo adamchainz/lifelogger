@@ -108,28 +108,56 @@ list_command.parser.add_argument('filter_re', nargs="+", type=unicode)
 list_command.parser.set_defaults(func=list_command)
 
 
-def tsv(filter_re, varnames=None):
+def csv(filter_re, separator, varnames):
     filter_re = ' '.join(filter_re)
 
-    if varnames is None:
-        varnames = "start,end,summary"
-
     varnames = varnames.split(',')
+
+    separator = {
+        'comma': ',',
+        'semicolon': ';',
+        'tab': '\t',
+    }[separator]
 
     from ..database import Event, regexp
 
     events = Event.select().where(regexp(Event.summary, filter_re))
 
     # Header
-    print "\t".join(varnames)
+    print separator.join(varnames)
 
     # Data
     for event in events:
-        print '\t'.join([
+        print separator.join([
             nice_format(getattr(event, varname)) for varname in varnames
         ])
 
-tsv.parser = subparsers.add_parser('tsv')
-tsv.parser.add_argument('filter_re', nargs="+", type=unicode)
-tsv.parser.add_argument('-v', '--varnames', nargs="?", type=unicode)
-tsv.parser.set_defaults(func=tsv)
+
+csv.parser = subparsers.add_parser(
+    'csv',
+    description="Used to output properties of events that a given filter as CSV data."
+)
+csv.parser.add_argument(
+    '-s',
+    '--separator',
+    nargs="?",
+    type=unicode,
+    default="comma",
+    choices=['comma', 'semicolon', 'tab'],
+    help="Separator for the output - default comma."
+)
+csv.parser.add_argument(
+    '-v',
+    '--varnames',
+    nargs="?",
+    type=unicode,
+    default="start,end,summary",
+    help="A comma-separated list of the Event variables to output. Defaults to 'start,end,summary'."
+)
+csv.parser.add_argument(
+    'filter_re',
+    nargs="+",
+    type=unicode,
+    help="The regex to filter events by."
+)
+csv.parser.set_defaults(func=csv)
