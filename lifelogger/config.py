@@ -6,6 +6,7 @@ from UserDict import DictMixin
 DATA_PATH = os.path.expanduser("~/.config/lifelogger/")
 CONFIG_PATH = os.path.join(DATA_PATH, "config.json")
 ICAL_PATH = os.path.join(DATA_PATH, "calendar.ics")
+DB_PATH = os.path.join(DATA_PATH, "calendar.sqlite")
 
 
 class ConfigDict(DictMixin, object):

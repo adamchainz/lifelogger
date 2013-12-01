@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 
 import dateutil.parser
 import requests
+from icalendar import Calendar
 
 from .connection import connect
 from .config import config, ICAL_PATH
@@ -199,3 +200,47 @@ def download(reset=None):
 download.parser = subparsers.add_parser('download')
 download.parser.add_argument('-r', '--reset', const=True, default=False, nargs='?')
 download.parser.set_defaults(func=download)
+
+
+def make_db():
+    from .analyzer import Event
+
+    print "Converting iCal file into sqlite database for faster querying..."
+
+    with open(ICAL_PATH, 'rb') as f:
+        ical_data = f.read()
+
+    cal = Calendar.from_ical(ical_data)
+
+    try:
+        Event.drop_table()
+    except:
+        pass
+    try:
+        Event.create_table()
+    except:
+        pass
+
+    for event in cal.walk("VEVENT"):
+        Event.create_from_ical_event(event)
+
+    print "Imported {} events into sqlite database.".format(
+        Event.select().count()
+    )
+
+make_db.parser = subparsers.add_parser('make_db')
+make_db.parser.set_defaults(func=make_db)
+
+
+def shell():
+    from datetime import datetime, date
+    from .analyzer import Event, regexp
+
+    [datetime, date, Event, regexp]
+
+    from IPython import embed
+    embed()
+
+shell.parser = subparsers.add_parser('shell')
+shell.parser.set_defaults(func=shell)
+
