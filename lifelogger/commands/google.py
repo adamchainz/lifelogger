@@ -42,9 +42,14 @@ quickadd.parser.add_argument('summary')
 quickadd.parser.set_defaults(func=quickadd)
 
 
-def now(summary, offset=0, duration=None):
+def now(summary, offset=None, duration=None):
+    if offset is None:
+        offset = 0
+
     if duration is None:
         duration = 0
+
+    summary = ' '.join(summary)
 
     service = connect()
 
@@ -76,9 +81,9 @@ def now(summary, offset=0, duration=None):
         return False
 
 now.parser = subparsers.add_parser('now')
-now.parser.add_argument('offset', type=int, default=0, nargs='?')
+now.parser.add_argument('-o', '--offset', type=int)
 now.parser.add_argument('-d', '--duration', type=int)
-now.parser.add_argument('summary')
+now.parser.add_argument('summary', nargs="+", type=unicode)
 now.parser.set_defaults(func=now)
 
 
