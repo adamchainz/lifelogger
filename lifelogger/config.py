@@ -19,7 +19,9 @@ class ConfigDict(DictMixin, object):
             with open(self._path) as cfile:
                 self._data.update(json.load(cfile))
         except IOError:
-            raise IOError("Config file {} missing or corrupt!".format(self._path))
+            print "(Config file {} missing - creating afresh)".format(self._path)
+        except ValueError:
+            raise ValueError("Config file {} corrupt!".format(self._path))
 
         self._loaded = True
 
@@ -28,7 +30,7 @@ class ConfigDict(DictMixin, object):
             os.makedirs(DATA_PATH)
 
         with open(CONFIG_PATH, 'w') as cfile:
-            cfile.write(json.dump(self._data))
+            cfile.write(json.dumps(self._data))
 
     def __getitem__(self, key):
         if not self._loaded:
@@ -40,6 +42,14 @@ class ConfigDict(DictMixin, object):
             self._load()
 
         self._data[key] = value
+
+        self._save()
+
+    def __delitem__(self, key):
+        if not self._loaded:
+            self._load()
+
+        del self._data[key]
 
         self._save()
 
