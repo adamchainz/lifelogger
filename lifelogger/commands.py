@@ -36,9 +36,9 @@ def quickadd(summary):
         sys.stdout.write("Failed :( - status %s\n" % result['status'])
         return False
 
-parser_quickadd = subparsers.add_parser('quickadd')
-parser_quickadd.add_argument('summary')
-parser_quickadd.set_defaults(func=quickadd)
+quickadd.parser = subparsers.add_parser('quickadd')
+quickadd.parser.add_argument('summary')
+quickadd.parser.set_defaults(func=quickadd)
 
 
 def now(summary, offset=0, duration=None):
@@ -74,11 +74,11 @@ def now(summary, offset=0, duration=None):
         sys.stdout.write("Failed :( - status %s\n" % result['status'])
         return False
 
-parser_now = subparsers.add_parser('now')
-parser_now.add_argument('offset', type=int, default=0, nargs='?')
-parser_now.add_argument('-d', '--duration', type=int)
-parser_now.add_argument('summary')
-parser_now.set_defaults(func=now)
+now.parser = subparsers.add_parser('now')
+now.parser.add_argument('offset', type=int, default=0, nargs='?')
+now.parser.add_argument('-d', '--duration', type=int)
+now.parser.add_argument('summary')
+now.parser.set_defaults(func=now)
 
 
 def for_command(duration, summary):
@@ -115,13 +115,13 @@ def for_command(duration, summary):
         sys.stdout.write("Failed :( - status %s\n" % result['status'])
         return False
 
-parser_for = subparsers.add_parser('for')
-parser_for.add_argument('duration', type=int)
-parser_for.add_argument('summary')
-parser_for.set_defaults(func=for_command)
+for_command.parser = subparsers.add_parser('for')
+for_command.parser.add_argument('duration', type=int)
+for_command.parser.add_argument('summary')
+for_command.parser.set_defaults(func=for_command)
 
 
-def add_command(summary, when=None, duration=0):
+def add(summary, when=None, duration=0):
     if when is None:
         when = datetime.now()
     else:
@@ -161,7 +161,7 @@ def add_command(summary, when=None, duration=0):
         return False
 
 
-parser_add = subparsers.add_parser('add')
-parser_add.add_argument('-w', '--when', default=None)
-parser_add.add_argument('summary')
-parser_add.set_defaults(func=add_command)
+add.parser = subparsers.add_parser('add')
+add.parser.add_argument('-w', '--when', default=None)
+add.parser.add_argument('summary')
+add.parser.set_defaults(func=add)
