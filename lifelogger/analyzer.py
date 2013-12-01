@@ -5,6 +5,7 @@ from datetime import datetime, time
 from peewee import CharField, DateTimeField, Expression, Model, SqliteDatabase
 
 from .config import DB_PATH
+from .utils import blue, highlight_tags
 
 
 # Add regex function to SqliteDatabase
@@ -47,6 +48,14 @@ class Event(Model):
         )
         order_by = ('start',)
 
+    @classmethod
+    def create_from_ical_event(cls, ical_event):
+        return cls.create(
+            summary=ical_event.get('summary'),
+            start=normalized(ical_event.get('dtstart').dt),
+            end=normalized(ical_event.get('dtend').dt),
+        )
+
     def __unicode__(self):
         return u"{}    {}    {}".format(
             self.start,
@@ -54,12 +63,15 @@ class Event(Model):
             self.summary,
         )
 
-    @classmethod
-    def create_from_ical_event(cls, ical_event):
-        return cls.create(
-            summary=ical_event.get('summary'),
-            start=normalized(ical_event.get('dtstart').dt),
-            end=normalized(ical_event.get('dtend').dt),
+    def display(self):
+        # Pretty tabular formatting.
+        start = self.start.strftime('%Y %b %d %H:%M')
+        end = self.end.strftime('%b %d %H:%M')
+
+        return "{}\t{}\t{}".format(
+            blue(start),
+            blue(end),
+            highlight_tags(self.summary)
         )
 
 

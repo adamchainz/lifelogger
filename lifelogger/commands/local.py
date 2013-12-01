@@ -97,7 +97,7 @@ def list_command(filter_re):
     events = Event.select().where(regexp(Event.summary, filter_re))
 
     for event in events:
-        print event
+        print event.display()
 
     return True
 
