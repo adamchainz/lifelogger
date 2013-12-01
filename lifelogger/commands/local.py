@@ -42,8 +42,18 @@ def download(reset=None):
 
     return True
 
-download.parser = subparsers.add_parser('download')
-download.parser.add_argument('-r', '--reset', const=True, default=False, nargs='?')
+download.parser = subparsers.add_parser(
+    'download',
+    description="Downloads the iCal that contains the whole of your Google Calendar, and then parses it into the local database"
+)
+download.parser.add_argument(
+    '-r',
+    '--reset',
+    const=True,
+    default=False,
+    nargs='?',
+    help="Pass this in to force re-pasting in the iCal url, if e.g. the url stored in lifelogger is no longer valid."
+)
 download.parser.set_defaults(func=download)
 
 
@@ -75,7 +85,10 @@ def make_db():
 
     return True
 
-make_db.parser = subparsers.add_parser('make_db')
+make_db.parser = subparsers.add_parser(
+    'make_db',
+    description="Parses the downloaded iCal file into the local sqlite database. Normally done when the download command is run, but may need re-running on changes to lifelogger."
+)
 make_db.parser.set_defaults(func=make_db)
 
 
@@ -83,12 +96,16 @@ def shell():
     from datetime import datetime, date
     from ..database import Event, regexp
 
+    # This is just to avoid 'unused import' linter errors
     [datetime, date, Event, regexp]
 
     from IPython import embed
     embed()
 
-shell.parser = subparsers.add_parser('shell')
+shell.parser = subparsers.add_parser(
+    'shell',
+    description="Loads the local database and an IPython shell so you can manually search around the events using the 'peewee' ORM."
+)
 shell.parser.set_defaults(func=shell)
 
 
@@ -103,8 +120,16 @@ def list_command(filter_re):
 
     return True
 
-list_command.parser = subparsers.add_parser('list')
-list_command.parser.add_argument('filter_re', nargs="+", type=unicode)
+list_command.parser = subparsers.add_parser(
+    'list',
+    description="Lists the events that match a given regex."
+)
+list_command.parser.add_argument(
+    'filter_re',
+    nargs="+",
+    type=unicode,
+    help="The regex to filter events by."
+)
 list_command.parser.set_defaults(func=list_command)
 
 
