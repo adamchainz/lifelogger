@@ -4,7 +4,7 @@ import sys
 
 from oauth2client import client as oa2c_client
 
-from commands import parser
+from .commands import parser
 
 
 def main(argv):

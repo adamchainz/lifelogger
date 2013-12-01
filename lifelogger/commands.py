@@ -5,8 +5,8 @@ import re
 import sys
 from datetime import datetime, timedelta
 
-import connection
-from config import config
+from .connection import connect
+from .config import config
 
 
 parser = argparse.ArgumentParser()
@@ -14,7 +14,7 @@ subparsers = parser.add_subparsers()
 
 
 def quickadd(summary):
-    service = connection.connect()
+    service = connect()
 
     # Double up single-time events to be 0-length
     match = re.match(r'^\d\d:\d\d ', summary)
@@ -45,7 +45,7 @@ def now(summary, offset=0, duration=None):
     if duration is None:
         duration = 0
 
-    service = connection.connect()
+    service = connect()
 
     start = datetime.now() + timedelta(minutes=offset)
     end = start + timedelta(minutes=duration)
@@ -82,7 +82,7 @@ parser_now.set_defaults(func=now)
 
 
 def for_command(duration, summary):
-    service = connection.connect()
+    service = connect()
 
     times = [
         datetime.now(),
@@ -127,7 +127,7 @@ def add_command(summary, when=None, duration=0):
     else:
         when = dateutil.parser.parse(when)
 
-    service = connection.connect()
+    service = connect()
 
     times = [
         when,

@@ -15,7 +15,6 @@ class ConfigDict(DictMixin, object):
         self._data = {}
 
     def _load(self):
-        print "load"
         try:
             with open(self._path) as cfile:
                 self._data.update(json.load(cfile))
