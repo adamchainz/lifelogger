@@ -75,13 +75,28 @@ class Event(Model):
         )
 
     @property
+    def duration_seconds(self):
+        return (self.end - self.start).total_seconds()
+
+    @property
+    def duration_minutes(self):
+        return self.duration_seconds / 60.0
+
+    @property
     def kg(self):
+        return self.number_property('kg', '([0-9.]+)kg\\b')
+
+    @property
+    def mg(self):
+        return self.number_property('mg', '([0-9.]+)mg\\b')
+
+    def number_property(self, name, regex):
         try:
             return float(
-                re.search('([0-9.]+)kg\\b', self.summary).group(1)
+                re.search(regex, self.summary).group(1)
             )
         except ValueError:
-            raise ValueError("Event {} has no kg variable".format(self))
+            raise ValueError("Event {} has no variable {}".format(self, name))
 
 
 def normalized(dt):
