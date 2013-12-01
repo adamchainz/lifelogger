@@ -1,12 +1,14 @@
 # coding=utf-8
 import argparse
-import dateutil.parser
 import re
 import sys
 from datetime import datetime, timedelta
 
+import dateutil.parser
+import requests
+
 from .connection import connect
-from .config import config
+from .config import config, ICAL_PATH
 
 
 parser = argparse.ArgumentParser()
@@ -165,3 +167,35 @@ add.parser = subparsers.add_parser('add')
 add.parser.add_argument('-w', '--when', default=None)
 add.parser.add_argument('summary')
 add.parser.set_defaults(func=add)
+
+
+def download(reset=None):
+    if reset:
+        config.pop('ical_url', None)
+
+    try:
+        ical_url = config['ical_url']
+    except KeyError:
+        print "To download the iCal file for analysis, you must give me the public URL for it."
+        print "Please go to the Google Calendar web interface, 'Calendar Settings', and then copy the link address from the ICAL button under 'Calendar Address'"
+        ical_url = raw_input("Paste --> ")
+        config['ical_url'] = ical_url
+
+    print "Downloading private iCal file..."
+    req = requests.get(ical_url, stream=True)
+
+    if req.status_code != 200:
+        print "Could not fetch iCal url - has it expired? To change, run download --reset"
+        print ical_url
+        return False
+
+    with open(ICAL_PATH, 'wb') as f:
+        for chunk in req.iter_content():
+            f.write(chunk)
+
+    print "Download successful!"
+    return True
+
+download.parser = subparsers.add_parser('download')
+download.parser.add_argument('-r', '--reset', const=True, default=False, nargs='?')
+download.parser.set_defaults(func=download)
