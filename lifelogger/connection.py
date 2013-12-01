@@ -62,12 +62,10 @@ def connect():
         primary_cal = [cal for cal in all_cals
                        if 'primary' in cal and cal['primary']][0]
         config['calendar_id'] = primary_cal['id']
-        config.save()
 
     if 'timezone' not in config:
         settings = service.settings().list().execute()['items']
         settings = dict([(item['id'], item['value']) for item in settings])
         config['timezone'] = settings.get('timezone', "Europe/London")
-        config.save()
 
     return service
