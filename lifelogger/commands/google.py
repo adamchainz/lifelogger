@@ -169,12 +169,13 @@ def add(summary, start=None, end=None, duration=None):
     else:
         start = dateutil.parser.parse(start)
 
-    if end is None:
-        end = datetime.now()
-    else:
+    if end is not None:
         end = dateutil.parser.parse(end)
 
     if duration is None:
+        duration = 0
+
+    if end is None:
         end = start + timedelta(minutes=duration)
 
     service = connect()
