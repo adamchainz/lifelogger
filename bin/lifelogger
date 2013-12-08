@@ -1,3 +1,5 @@
 #!/bin/sh
-cd `dirname "$0"`/..
+SCRIPT_PARENT=$(readlink "$0")
+SCRIPT_PARENT=$(dirname $SCRIPT_PARENT)/..
+cd $SCRIPT_PARENT
 python -m lifelogger.main $@
