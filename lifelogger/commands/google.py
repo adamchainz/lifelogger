@@ -87,8 +87,7 @@ now.parser = subparsers.add_parser(
     'now',
     description="Adds an event 'right now' (with optional relative offset).")
 now.parser.add_argument(
-    '-o',
-    '--offset',
+    'offset',
     type=int,
     default=0,
     help="An offset number of minutes, positive or negative, to change the event start time by."
