@@ -68,7 +68,7 @@ class Event(Model):
         start = self.start.strftime('%Y %b %d %H:%M')
         end = self.end.strftime('%b %d %H:%M')
 
-        return "{}\t{}\t{}".format(
+        return u"{}\t{}\t{}".format(
             blue(start),
             blue(end),
             highlight_tags(self.summary)
