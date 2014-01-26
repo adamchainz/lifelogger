@@ -51,7 +51,7 @@ quickadd.parser.add_argument(
 quickadd.parser.set_defaults(func=quickadd)
 
 
-def now(summary, duration, offset):
+def now(summary, duration, offset=0):
     summary = ' '.join(summary)
 
     service = connect()
@@ -85,13 +85,7 @@ def now(summary, duration, offset):
 
 now.parser = subparsers.add_parser(
     'now',
-    description="Adds an event 'right now' (with optional relative offset).")
-now.parser.add_argument(
-    'offset',
-    type=int,
-    default=0,
-    help="An offset number of minutes, positive or negative, to change the event start time by."
-)
+    description="Adds an event 'right now'.")
 now.parser.add_argument(
     '-d',
     '--duration',
