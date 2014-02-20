@@ -51,7 +51,13 @@ quickadd.parser.add_argument(
 quickadd.parser.set_defaults(func=quickadd)
 
 
-def now(summary, duration, offset=0):
+def now(summary, duration):
+    try:
+        offset = int(summary[0])
+        summary = summary[1:]
+    except ValueError:
+        offset = 0
+
     summary = ' '.join(summary)
 
     service = connect()
