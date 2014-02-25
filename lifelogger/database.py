@@ -83,6 +83,14 @@ class Event(Model):
         return self.duration_seconds / 60.0
 
     @property
+    def duration_hours(self):
+        return self.duration_seconds / (3600.0)
+
+    @property
+    def duration_days(self):
+        return self.duration_seconds / (3600.0 * 24)
+
+    @property
     def kg(self):
         return self.number_property('kg', '([0-9.]+)kg\\b')
 
