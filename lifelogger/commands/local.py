@@ -177,7 +177,7 @@ csv.parser.add_argument(
     nargs="?",
     type=unicode,
     default="start,end,summary",
-    help="A comma-separated list of the Event variables to output. Defaults to 'start,end,summary'."
+    help="A comma-separated list of the Event variables to output (options: start, end, summary, duration_seconds, duration_minutes, duration_hours, units, percentage, kg, mg). Defaults to 'start,end,summary'."
 )
 csv.parser.add_argument(
     'filter_re',

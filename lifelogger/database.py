@@ -91,20 +91,45 @@ class Event(Model):
         return self.duration_seconds / (3600.0 * 24)
 
     @property
+    def units(self):
+        # Used for #alcohol intake
+        return self.equality_property('units')
+
+    def equality_property(self, key):
+        """
+        Extracts a property from the event of the form key=value, e.g. units=3
+        """
+        try:
+            return re.search('\\b%s=(\S+)\\b' % key, self.summary).group(1)
+        except (AttributeError):
+            raise ValueError("Event {} doesn't match for property {}".format(self, key))
+
+    @property
+    def percentage(self):
+        # Used for #bodyfat measurements
+        return self.measurement_property('percentage', '\\b([0-9.]+)%')
+
+    @property
     def kg(self):
-        return self.number_property('kg', '([0-9.]+)kg\\b')
+        # Used for #weight measurements
+        return self.measurement_property('kg', '([0-9.]+)kg\\b')
 
     @property
     def mg(self):
-        return self.number_property('mg', '([0-9.]+)mg\\b')
+        # Used for drug intake, e.g. #caffeine measurements
+        return self.measurement_property('mg', '([0-9.]+)mg\\b')
 
-    def number_property(self, name, regex):
+    def measurement_property(self, units, regex):
+        """
+        Extracts a property from the event description of the form Xunits,
+        e.g. 80kg
+        """
         try:
             return float(
                 re.search(regex, self.summary).group(1)
             )
-        except ValueError:
-            raise ValueError("Event {} has no variable {}".format(self, name))
+        except (ValueError, AttributeError):
+            raise ValueError("Event {} doesn't match for property {}".format(self, units))
 
 
 def normalized(dt):
