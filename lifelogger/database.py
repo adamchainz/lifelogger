@@ -5,7 +5,7 @@ from datetime import datetime, time
 from peewee import CharField, DateTimeField, Expression, Model, SqliteDatabase
 
 from .config import DB_PATH
-from .utils import blue, highlight_tags
+from .utils import blue, highlight_tags, pink
 
 
 # Add regex function to SqliteDatabase
@@ -38,6 +38,7 @@ class Event(Model):
     summary = CharField()
     start = DateTimeField()
     end = DateTimeField()
+    description = CharField()
 
     class Meta:
         database = db
@@ -54,6 +55,7 @@ class Event(Model):
             summary=ical_event.get('summary'),
             start=normalized(ical_event.get('dtstart').dt),
             end=normalized(ical_event.get('dtend').dt),
+            description=ical_event.get('description', ''),
         )
 
     def __unicode__(self):
@@ -68,11 +70,16 @@ class Event(Model):
         start = self.start.strftime('%Y %b %d %H:%M')
         end = self.end.strftime('%b %d %H:%M')
 
-        return u"{}\t{}\t{}".format(
+        out = u"{}\t{}\t{}".format(
             blue(start),
             blue(end),
             highlight_tags(self.summary)
         )
+
+        if self.description:
+            out += u"\n\t" + pink(format(self.description)).replace("\n", "\n\t")
+
+        return out
 
     @property
     def duration_seconds(self):
