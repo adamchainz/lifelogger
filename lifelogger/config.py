@@ -9,6 +9,10 @@ ICAL_PATH = os.path.join(DATA_PATH, "calendar.ics")
 DB_PATH = os.path.join(DATA_PATH, "calendar.sqlite")
 
 
+if not os.path.exists(DATA_PATH):
+    os.makedirs(DATA_PATH)
+
+
 class ConfigDict(DictMixin, object):
 
     def __init__(self, path):
