@@ -97,10 +97,11 @@ class Event(Model):
     def duration_days(self):
         return self.duration_seconds / (3600.0 * 24)
 
-    @property
-    def units(self):
-        # Used for #alcohol intake
-        return self.equality_property('units')
+    def get_var(self, varname):
+        if hasattr(self, varname):
+            return getattr(self, varname)
+        else:
+            return self.equality_property(varname)
 
     def equality_property(self, key):
         """

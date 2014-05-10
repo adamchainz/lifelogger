@@ -154,7 +154,7 @@ def csv(filter_re, separator, varnames):
     # Data
     for event in events:
         print separator.join([
-            nice_format(getattr(event, varname)) for varname in varnames
+            nice_format(event.get_var(varname)) for varname in varnames
         ])
 
 
