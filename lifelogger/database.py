@@ -82,6 +82,10 @@ class Event(Model):
         return out
 
     @property
+    def start_date(self):
+        return self.start.date()
+
+    @property
     def duration_seconds(self):
         return (self.end - self.start).total_seconds()
 
