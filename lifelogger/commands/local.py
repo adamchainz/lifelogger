@@ -108,6 +108,46 @@ shell.parser = subparsers.add_parser(
 )
 shell.parser.set_defaults(func=shell)
 
+def sql(statement, separator):
+    from ..database import conn
+    statement = ' '.join(statement)
+
+    cursor = conn.cursor()
+    cursor.execute(statement)
+
+    separator = {
+        'comma': ',',
+        'semicolon': ';',
+        'tab': '\t',
+    }[separator]
+
+    # Header
+    print separator.join([d[0] for d in cursor.description])
+
+    # Data
+    for row in cursor.fetchall():
+        print separator.join([str(v) for v in row])
+
+sql.parser = subparsers.add_parser(
+    'sql',
+    description="Execute a SQL statement direct on the db and output results as csv."
+)
+sql.parser.add_argument(
+    'statement',
+    nargs="+",
+    type=unicode,
+    help="The SQL statement."
+)
+sql.parser.add_argument(
+    '-s',
+    '--separator',
+    nargs="?",
+    type=unicode,
+    default="comma",
+    choices=['comma', 'semicolon', 'tab'],
+    help="Separator for the output - default comma."
+)
+sql.parser.set_defaults(func=sql)
 
 def list_command(filter_re):
     filter_re = ' '.join(filter_re)
