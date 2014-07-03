@@ -51,10 +51,19 @@ class Event(Model):
 
     @classmethod
     def create_from_ical_event(cls, ical_event):
+        start = normalized(ical_event.get('dtstart').dt)
+        end = ical_event.get('dtend')
+
+        # 0-minute events have no end
+        if end is not None:
+            end = normalized(end.dt)
+        else:
+            end = start
+
         return cls.create(
             summary=ical_event.get('summary'),
-            start=normalized(ical_event.get('dtstart').dt),
-            end=normalized(ical_event.get('dtend').dt),
+            start=start,
+            end=end,
             description=ical_event.get('description', ''),
         )
 
