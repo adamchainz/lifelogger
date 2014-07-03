@@ -1,6 +1,6 @@
 # coding=utf-8
-from .local import *
-from .google import *
+from .local import *  # noqa
+from .google import *  # noqa
 from .parser import parser
 
 

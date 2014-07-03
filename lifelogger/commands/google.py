@@ -41,7 +41,11 @@ def quickadd(summary):
 
 quickadd.parser = subparsers.add_parser(
     'quickadd',
-    description="Use 'quick-add' to add an event to your calendar - works the same as the Google Calendar web interface function, with some extensions. To add a 0-minute event at a particular time today, run with the time in 24-hour format at the start, e.g. '10:00 Coffee'."
+    description="Use 'quick-add' to add an event to your calendar - works the "
+                "same as the Google Calendar web interface function, with "
+                "some extensions. To add a 0-minute event at a particular "
+                "time today, run with the time in 24-hour format at the "
+                "start, e.g. '10:00 Coffee'."
 )
 quickadd.parser.add_argument(
     'summary',
@@ -146,11 +150,15 @@ def for_command(duration, summary):
 
 for_command.parser = subparsers.add_parser(
     'for',
-    description="Adds an event that lasts *for* the specified number of minutes, relative to now.")
+    description="Adds an event that lasts *for* the specified number of "
+                "minutes, relative to now."
+)
 for_command.parser.add_argument(
     'duration',
     type=int,
-    help="The duration of the event. Give a negative number, and the event will be set to have started 'duration' minutes ago, and end now; otherwise it starts now and ends in 'duration' minutes time."
+    help="The duration of the event. Give a negative number, and the event "
+         "will be set to have started 'duration' minutes ago, and end now; "
+         "otherwise it starts now and ends in 'duration' minutes time."
 )
 for_command.parser.add_argument(
     'summary',
@@ -185,7 +193,11 @@ def add(summary, start=None, end=None, duration=None):
 
     duration = (end - start).total_seconds() / 60
 
-    print "Adding %i-minute event at %s >> %s" % (abs(duration), start, summary)
+    print "Adding {length}-minute event at {start} >> {summary}".format(
+        length=abs(duration),
+        start=start,
+        summary=summary
+    )
 
     result = service.events().insert(
         calendarId=config['calendar_id'],
@@ -212,7 +224,8 @@ def add(summary, start=None, end=None, duration=None):
 
 add.parser = subparsers.add_parser(
     'add',
-    description="Generic event adding command, with all the bells and whistles."
+    description="Generic event adding command, with all the bells and "
+                "whistles."
 )
 add.parser.add_argument(
     '-s',
@@ -230,7 +243,8 @@ add.parser.add_argument(
     '-d',
     '--duration',
     default=None,
-    help="The duration, in minutes, for the event. If both end and duration are set, duration overrides. Can be negative."
+    help="The duration, in minutes, for the event. If both end and duration "
+         "are set, duration overrides. Can be negative."
 )
 add.parser.add_argument(
     'summary',
@@ -238,4 +252,3 @@ add.parser.add_argument(
     nargs='*'
 )
 add.parser.set_defaults(func=add)
-

@@ -19,8 +19,11 @@ def download(reset=None):
     try:
         ical_url = config['ical_url']
     except KeyError:
-        print "To download the iCal file for analysis, you must give me the public URL for it."
-        print "Please go to the Google Calendar web interface, 'Calendar Settings', and then copy the link address from the ICAL button under 'Calendar Address'"
+        print "To download the iCal file for analysis, you must give me the " \
+              "public URL for it."
+        print "Please go to the Google Calendar web interface " \
+              ", 'Calendar Settings', and then copy the link address from " \
+              "the ICAL button under 'Calendar Address'"
         ical_url = raw_input("Paste --> ")
         config['ical_url'] = ical_url
 
@@ -28,7 +31,8 @@ def download(reset=None):
     req = requests.get(ical_url, stream=True)
 
     if req.status_code != 200:
-        print "Could not fetch iCal url - has it expired? To change, run download --reset"
+        print "Could not fetch iCal url - has it expired? "
+        print "To change, run download --reset"
         print ical_url
         return False
 
@@ -44,7 +48,8 @@ def download(reset=None):
 
 download.parser = subparsers.add_parser(
     'download',
-    description="Downloads the iCal that contains the whole of your Google Calendar, and then parses it into the local database"
+    description="Downloads the iCal that contains the whole of your Google "
+                "Calendar, and then parses it into the local database"
 )
 download.parser.add_argument(
     '-r',
@@ -52,7 +57,8 @@ download.parser.add_argument(
     const=True,
     default=False,
     nargs='?',
-    help="Pass this in to force re-pasting in the iCal url, if e.g. the url stored in lifelogger is no longer valid."
+    help="Pass this in to force re-pasting in the iCal url, if e.g. the url "
+         " stored in lifelogger is no longer valid."
 )
 download.parser.set_defaults(func=download)
 
@@ -87,7 +93,9 @@ def make_db():
 
 make_db.parser = subparsers.add_parser(
     'make_db',
-    description="Parses the downloaded iCal file into the local sqlite database. Normally done when the download command is run, but may need re-running on changes to lifelogger."
+    description="Parses the downloaded iCal file into the local sqlite "
+                "database. Normally done when the download command is run, "
+                "but may need re-running on changes to lifelogger."
 )
 make_db.parser.set_defaults(func=make_db)
 
@@ -104,9 +112,11 @@ def shell():
 
 shell.parser = subparsers.add_parser(
     'shell',
-    description="Loads the local database and an IPython shell so you can manually search around the events using the 'peewee' ORM."
+    description="Loads the local database and an IPython shell so you can "
+                "manually search around the events using the 'peewee' ORM."
 )
 shell.parser.set_defaults(func=shell)
+
 
 def sql(statement, separator):
     from ..database import conn
@@ -130,7 +140,8 @@ def sql(statement, separator):
 
 sql.parser = subparsers.add_parser(
     'sql',
-    description="Execute a SQL statement direct on the db and output results as csv."
+    description="Execute a SQL statement direct on the db and output results "
+                "as csv."
 )
 sql.parser.add_argument(
     'statement',
@@ -148,6 +159,7 @@ sql.parser.add_argument(
     help="Separator for the output - default comma."
 )
 sql.parser.set_defaults(func=sql)
+
 
 def list_command(filter_re):
     filter_re = ' '.join(filter_re)
@@ -200,7 +212,8 @@ def csv(filter_re, separator, varnames):
 
 csv.parser = subparsers.add_parser(
     'csv',
-    description="Used to output properties of events that a given filter as CSV data."
+    description="Used to output properties of events that a given filter as "
+                "CSV data."
 )
 csv.parser.add_argument(
     '-s',
@@ -217,7 +230,10 @@ csv.parser.add_argument(
     nargs="?",
     type=unicode,
     default="start,end,summary",
-    help="A comma-separated list of the Event variables to output (options: start, end, summary, duration_seconds, duration_minutes, duration_hours, units, percentage, kg, mg). Defaults to 'start,end,summary'."
+    help="A comma-separated list of the Event variables to output (options: "
+         "start, end, summary, duration_seconds, duration_minutes, "
+         "duration_hours, units, percentage, kg, mg). "
+         "Defaults to 'start,end,summary'."
 )
 csv.parser.add_argument(
     'filter_re',
