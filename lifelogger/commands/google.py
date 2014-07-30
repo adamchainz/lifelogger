@@ -243,6 +243,7 @@ add.parser.add_argument(
     '-d',
     '--duration',
     default=None,
+    type=int,
     help="The duration, in minutes, for the event. If both end and duration "
          "are set, duration overrides. Can be negative."
 )
