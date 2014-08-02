@@ -12,7 +12,10 @@ from oauth2client import file as oa2c_file
 from oauth2client import client as oa2c_client
 from oauth2client import tools as oa2c_tools
 
-CLIENT_SECRETS_PATH = os.path.join(os.path.dirname(__file__), 'client_secrets.json')
+CLIENT_SECRETS_PATH = os.path.join(
+    os.path.abspath(os.path.dirname(__file__)),
+    'client_secrets.json'
+)
 
 # Parser for command-line arguments - only used to get defaults
 parser = argparse.ArgumentParser(

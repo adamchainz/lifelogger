@@ -6,17 +6,15 @@ Track your life like a pro on Google Calendar via your terminal.
 
 ## Installation Instructions
 
-  1. Git clone this repo to your directory of choice.
-  2. Install the dependencies:
-
+  1. Install with pip, the python package manager:
     ```sh
-    sudo pip install -r requirements.txt
+    pip install lifelogger
     ```
 
-  3. Run for the first time, which should initialize the OAuth connection dialog.
+  2. Run for the first time, which should initialize the OAuth connection dialog.
 
     ```sh
-    ./lifelogger.py now "Started lifelogger"
+    lifelogger now "Started lifelogger"
     ```
 
     You'll need to click through and accept the app on your Google account. After saying yes, switch back to the terminal and you should see:
@@ -41,7 +39,7 @@ For a quick example, let's imagine you want to track your weight with `lifelogge
 Imagine you've got your scales out, and you weigh yourself - let's record it on the calendar as a 0-minute event:
 
 ```sh
-./lifelogger.py now "#weight 80.0kg"
+lifelogger now "#weight 80.0kg"
 ```
 
 The event should be added straightforwardly.
@@ -49,7 +47,7 @@ The event should be added straightforwardly.
 Once you get going, you'll probably want to track things quickly, so you won't want to have to `cd` into the `lifelogger` directory every time. You can add an alias in your shell startup file (e.g. `~/.bashrc`, `~/.zshrc`) so that you can always run the command quickly. The recommended alias is `l` (which will be used for the rest of this how-to):
 
 ```sh
-alias l=~/YOUR/PATH/TO/lifelogger.py
+alias l=lifelogger
 ```
 
 Now let's download the calendar for analysis. Run:
