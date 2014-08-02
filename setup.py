@@ -20,7 +20,7 @@ setup(
             'lifelogger = lifelogger.main:main',
         ],
     },
-    data_files=[
-        ('lifelogger', ['lifelogger/client_secrets.json'])
-    ]
+    package_data={
+        '': ['*.json'],
+    },
 )
