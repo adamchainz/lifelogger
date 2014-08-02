@@ -32,7 +32,17 @@ Track your life like a pro on Google Calendar via your terminal.
     And then when that succeeds, a link to the event on the Google Calendar web interface. Congratulations, you can now create events on Google Calendar from your terminal!
 
 
-## A Quick How-to
+## How does it work?
+
+`lifelogger` stores events directly into Google Calendar via its API. It can
+also download your entire calendar back to your computer via the "iCal export"
+URL that Google provides, and then you can use commands to analyze it locally.
+Downloading the entire calendar back makes it a lot faster to perform any
+analysis:
+
+![](https://github.com/github/training-kit/blob/master/docs/in-and-out.png)
+
+## Quickstart Guide
 
 For a quick example, let's imagine you want to track your weight with `lifelogger`. It's up to you to develop rules for tracking what you want to, but the suggested system you use is one of hashtags (like on Twitter) to keep your records machine searchable but still quite human readable. `lifelogger` is also aware of common data formats and knows how to search them, so we can just enter our weight in kg
 
