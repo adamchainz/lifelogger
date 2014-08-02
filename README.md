@@ -40,7 +40,7 @@ URL that Google provides, and then you can use commands to analyze it locally.
 Downloading the entire calendar back makes it a lot faster to perform any
 analysis:
 
-![](https://github.com/github/training-kit/blob/master/docs/in-and-out.png)
+![](https://github.com/adamchainz/lifelogger/blob/master/docs/in-and-out.png)
 
 ## Quickstart Guide
 
