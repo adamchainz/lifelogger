@@ -15,11 +15,9 @@ setup(
     author_email='me@adamj.eu',
     packages=find_packages(),
     install_requires=open('requirements.txt').readlines(),
-    entry_points={
-        'console_scripts': [
-            'lifelogger = lifelogger.main:main',
-        ],
-    },
+    scripts=[
+        'bin/lifelogger',
+    ],
     package_data={
         '': ['*.json'],
     },
