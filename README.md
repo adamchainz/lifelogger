@@ -86,3 +86,10 @@ l list "#weight"
 ```
 
 You should see a listing of all your events that match '#weight', with their date/time and the full information. There are plenty more commands to play with, including other options and ways to add events to your calendar, as well as query them in more interesting ways. Have a poke around in the source code to check it out!
+
+## Scripts
+
+I also use a few extra scripts to manage adding events to my lifelogger via
+some shortcuts. Check out the 'scripts' folder for copies of these. You'll need
+to customize them to your purpose as they are exporting my events only as it
+stands.
