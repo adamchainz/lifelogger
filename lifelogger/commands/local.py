@@ -102,11 +102,8 @@ make_db.parser.set_defaults(func=make_db)
 
 
 def shell():
-    from datetime import datetime, date
-    from ..database import Event, regexp
-
-    # This is just to avoid 'unused import' linter errors
-    [datetime, date, Event, regexp]
+    from datetime import datetime, date  # noqa
+    from ..database import Event, regexp  # noqa
 
     from IPython import embed
     embed()

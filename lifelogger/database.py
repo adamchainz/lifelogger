@@ -121,8 +121,8 @@ class Event(Model):
         Extracts a property from the event of the form key=value, e.g. units=3
         """
         try:
-            return re.search('\\b%s=(\S+)\\b' % key, self.summary).group(1)
-        except (AttributeError):
+            return re.search(r'\\b%s=(\S+)\\b' % key, self.summary).group(1)
+        except AttributeError:
             raise ValueError("Event {} doesn't match for property {}".format(self, key))
 
     @property
