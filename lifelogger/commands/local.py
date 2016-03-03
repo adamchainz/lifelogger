@@ -64,7 +64,7 @@ download.parser.set_defaults(func=download)
 
 
 def make_db():
-    from ..database import Event
+    from ..database import Event, db
 
     print "Converting iCal file into sqlite database..."
 
@@ -82,8 +82,9 @@ def make_db():
     except:
         pass
 
-    for event in cal.walk("VEVENT"):
-        Event.create_from_ical_event(event)
+    with db.atomic():
+        for event in cal.walk("VEVENT"):
+            Event.create_from_ical_event(event)
 
     print "Imported {} events.".format(
         Event.select().count()
