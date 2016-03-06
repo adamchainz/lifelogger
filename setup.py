@@ -21,4 +21,16 @@ setup(
     package_data={
         '': ['*.json'],
     },
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Console',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python',
+        'Topic :: Software Development'
+        'Topic :: Office/Business :: Scheduling'
+    ],
 )

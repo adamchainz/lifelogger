@@ -1,7 +1,7 @@
 # coding=utf-8
-from .local import *  # noqa
-from .google import *  # noqa
+from . import local
+from . import google
 from .parser import parser
 
 
-__all__ = ('parser',)
+__all__ = ('google', 'local', 'parser')
