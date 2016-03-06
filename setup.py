@@ -8,7 +8,7 @@ setup(
     name='lifelogger',
     version=lifelogger.__version__,
     description=lifelogger.__doc__.strip(),
-    long_description=open('README.md').read(),
+    long_description=open('README.rst').read(),
     url='https://github.com/adamchainz/lifelogger',
     license=lifelogger.__license__,
     author=lifelogger.__author__,
