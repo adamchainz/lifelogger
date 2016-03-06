@@ -30,7 +30,7 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python',
-        'Topic :: Software Development'
+        'Topic :: Software Development',
         'Topic :: Office/Business :: Scheduling'
     ],
 )
