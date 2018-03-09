@@ -2,6 +2,8 @@
 """
 All commands that call the Google API service.
 """
+from __future__ import absolute_import
+from __future__ import print_function
 import re
 import sys
 from datetime import datetime, timedelta
@@ -12,6 +14,7 @@ from ..connection import connect
 from ..config import config
 
 from .parser import subparsers
+import six
 
 
 def quickadd(summary):
@@ -25,7 +28,7 @@ def quickadd(summary):
         summary = match.group(0)[:-1] + '-' + summary
 
     # Make request
-    print "Quick add >>", summary
+    print("Quick add >>", summary)
 
     result = service.events().quickAdd(
         calendarId=config['calendar_id'],
@@ -33,7 +36,7 @@ def quickadd(summary):
     ).execute()
 
     if result['status'] == 'confirmed':
-        print "Added! Link: ", result['htmlLink']
+        print("Added! Link: ", result['htmlLink'])
         return True
     else:
         sys.stdout.write("Failed :( - status %s\n" % result['status'])
@@ -69,7 +72,7 @@ def now(summary, duration):
     start = datetime.now() + timedelta(minutes=offset)
     end = start + timedelta(minutes=duration)
 
-    print "Adding %i-minute event >> %s" % (duration, summary)
+    print("Adding %i-minute event >> %s" % (duration, summary))
 
     result = service.events().insert(
         calendarId=config['calendar_id'],
@@ -87,7 +90,7 @@ def now(summary, duration):
     ).execute()
 
     if result['status'] == 'confirmed':
-        print "Added! Link: ", result['htmlLink']
+        print("Added! Link: ", result['htmlLink'])
         return True
     else:
         sys.stdout.write("Failed :( - status %s\n" % result['status'])
@@ -106,7 +109,7 @@ now.parser.add_argument(
 now.parser.add_argument(
     'summary',
     nargs="+",
-    type=unicode,
+    type=six.text_type,
     help="The summary for the event."
 )
 now.parser.set_defaults(func=now)
@@ -124,7 +127,7 @@ def for_command(duration, summary):
     times.sort()
     start, end = times
 
-    print "Adding %i-minute event >> %s" % (abs(duration), summary)
+    print("Adding %i-minute event >> %s" % (abs(duration), summary))
 
     result = service.events().insert(
         calendarId=config['calendar_id'],
@@ -142,7 +145,7 @@ def for_command(duration, summary):
     ).execute()
 
     if result['status'] == 'confirmed':
-        print "Added! Link: ", result['htmlLink']
+        print("Added! Link: ", result['htmlLink'])
         return True
     else:
         sys.stdout.write("Failed :( - status %s\n" % result['status'])
@@ -193,11 +196,11 @@ def add(summary, start=None, end=None, duration=None):
 
     duration = (end - start).total_seconds() / 60
 
-    print "Adding {length}-minute event at {start} >> {summary}".format(
+    print("Adding {length}-minute event at {start} >> {summary}".format(
         length=abs(duration),
         start=start,
         summary=summary
-    )
+    ))
 
     result = service.events().insert(
         calendarId=config['calendar_id'],
@@ -215,7 +218,7 @@ def add(summary, start=None, end=None, duration=None):
     ).execute()
 
     if result['status'] == 'confirmed':
-        print "Added! Link: ", result['htmlLink']
+        print("Added! Link: ", result['htmlLink'])
         return True
     else:
         sys.stdout.write("Failed :( - status %s\n" % result['status'])

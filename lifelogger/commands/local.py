@@ -2,6 +2,8 @@
 """
 All commands that create & use the local copies of the Google Calendar data.
 """
+from __future__ import absolute_import
+from __future__ import print_function
 import requests
 
 from icalendar import Calendar
@@ -10,6 +12,8 @@ from ..config import config, ICAL_PATH
 from ..utils import nice_format
 
 from .parser import subparsers
+import six
+from six.moves import input
 
 
 def download(reset=None):
@@ -19,28 +23,28 @@ def download(reset=None):
     try:
         ical_url = config['ical_url']
     except KeyError:
-        print "To download the iCal file for analysis, you must give me the " \
-              "public URL for it."
-        print "Please go to the Google Calendar web interface " \
+        print("To download the iCal file for analysis, you must give me the " \
+              "public URL for it.")
+        print("Please go to the Google Calendar web interface " \
               ", 'Calendar Settings', and then copy the link address from " \
-              "the ICAL button under 'Calendar Address'"
-        ical_url = raw_input("Paste --> ")
+              "the ICAL button under 'Calendar Address'")
+        ical_url = input("Paste --> ")
         config['ical_url'] = ical_url
 
-    print "Downloading private iCal file..."
+    print("Downloading private iCal file...")
     req = requests.get(ical_url, stream=True)
 
     if req.status_code != 200:
-        print "Could not fetch iCal url - has it expired? "
-        print "To change, run download --reset"
-        print ical_url
+        print("Could not fetch iCal url - has it expired? ")
+        print("To change, run download --reset")
+        print(ical_url)
         return False
 
     with open(ICAL_PATH, 'wb') as f:
         for chunk in req.iter_content():
             f.write(chunk)
 
-    print "Download successful!"
+    print("Download successful!")
 
     make_db()
 
@@ -66,7 +70,7 @@ download.parser.set_defaults(func=download)
 def make_db():
     from ..database import Event, db
 
-    print "Converting iCal file into sqlite database..."
+    print("Converting iCal file into sqlite database...")
 
     with open(ICAL_PATH, 'rb') as f:
         ical_data = f.read()
@@ -86,9 +90,9 @@ def make_db():
         for event in cal.walk("VEVENT"):
             Event.create_from_ical_event(event)
 
-    print "Imported {} events.".format(
+    print("Imported {} events.".format(
         Event.select().count()
-    )
+    ))
 
     return True
 
@@ -130,11 +134,11 @@ def sql(statement, separator):
     }[separator]
 
     # Header
-    print separator.join([d[0] for d in cursor.description])
+    print(separator.join([d[0] for d in cursor.description]))
 
     # Data
     for row in cursor.fetchall():
-        print separator.join([str(v) for v in row])
+        print(separator.join([str(v) for v in row]))
 
 sql.parser = subparsers.add_parser(
     'sql',
@@ -144,14 +148,14 @@ sql.parser = subparsers.add_parser(
 sql.parser.add_argument(
     'statement',
     nargs="+",
-    type=unicode,
+    type=six.text_type,
     help="The SQL statement."
 )
 sql.parser.add_argument(
     '-s',
     '--separator',
     nargs="?",
-    type=unicode,
+    type=six.text_type,
     default="comma",
     choices=['comma', 'semicolon', 'tab'],
     help="Separator for the output - default comma."
@@ -166,7 +170,7 @@ def list_command(filter_re):
     events = Event.select().where(regexp(Event.summary, filter_re))
 
     for event in events:
-        print event.display()
+        print(event.display())
 
     return True
 
@@ -177,7 +181,7 @@ list_command.parser = subparsers.add_parser(
 list_command.parser.add_argument(
     'filter_re',
     nargs="+",
-    type=unicode,
+    type=six.text_type,
     help="The regex to filter events by."
 )
 list_command.parser.set_defaults(func=list_command)
@@ -199,13 +203,13 @@ def csv(filter_re, separator, varnames):
     events = Event.select().where(regexp(Event.summary, filter_re))
 
     # Header
-    print separator.join(varnames)
+    print(separator.join(varnames))
 
     # Data
     for event in events:
-        print separator.join([
+        print(separator.join([
             nice_format(event.get_var(varname)) for varname in varnames
-        ])
+        ]))
 
 
 csv.parser = subparsers.add_parser(
@@ -217,7 +221,7 @@ csv.parser.add_argument(
     '-s',
     '--separator',
     nargs="?",
-    type=unicode,
+    type=six.text_type,
     default="comma",
     choices=['comma', 'semicolon', 'tab'],
     help="Separator for the output - default comma."
@@ -226,7 +230,7 @@ csv.parser.add_argument(
     '-v',
     '--varnames',
     nargs="?",
-    type=unicode,
+    type=six.text_type,
     default="start,end,summary",
     help="A comma-separated list of the Event variables to output (options: "
          "start, end, summary, duration_seconds, duration_minutes, "
@@ -236,7 +240,7 @@ csv.parser.add_argument(
 csv.parser.add_argument(
     'filter_re',
     nargs="+",
-    type=unicode,
+    type=six.text_type,
     help="The regex to filter events by."
 )
 csv.parser.set_defaults(func=csv)

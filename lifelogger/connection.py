@@ -2,6 +2,7 @@
 """
 Handles connecting to Google API and authenticating.
 """
+from __future__ import absolute_import
 import argparse
 import httplib2
 import os
@@ -36,7 +37,7 @@ FLOW = oa2c_client.flow_from_clientsecrets(
 
 
 def connect():
-    from config import config, DATA_PATH
+    from .config import config, DATA_PATH
 
     flags = parser.parse_args([])
 

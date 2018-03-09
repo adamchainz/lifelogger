@@ -1,4 +1,6 @@
 # coding=utf-8
+from __future__ import absolute_import
+from __future__ import print_function
 import json
 import os
 from UserDict import DictMixin
@@ -25,7 +27,7 @@ class ConfigDict(DictMixin, object):
             with open(self._path) as cfile:
                 self._data.update(json.load(cfile))
         except IOError:
-            print "(Config file {} missing - creating afresh)".format(self._path)
+            print("(Config file {} missing - creating afresh)".format(self._path))
         except ValueError:
             raise ValueError("Config file {} corrupt!".format(self._path))
 
