@@ -16,6 +16,7 @@ OP_REGEXP = 'regexp'
 def regexp(lhs, rhs):
     return Expression(lhs, 'regexp', rhs)
 
+
 SqliteDatabase.register_ops({OP_REGEXP: 'REGEXP'})
 
 

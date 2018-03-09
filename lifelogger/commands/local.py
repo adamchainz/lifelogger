@@ -2,8 +2,8 @@
 """
 All commands that create & use the local copies of the Google Calendar data.
 """
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
+
 import requests
 
 from icalendar import Calendar
@@ -23,10 +23,10 @@ def download(reset=None):
     try:
         ical_url = config['ical_url']
     except KeyError:
-        print("To download the iCal file for analysis, you must give me the " \
+        print("To download the iCal file for analysis, you must give me the "
               "public URL for it.")
-        print("Please go to the Google Calendar web interface " \
-              ", 'Calendar Settings', and then copy the link address from " \
+        print("Please go to the Google Calendar web interface "
+              ", 'Calendar Settings', and then copy the link address from "
               "the ICAL button under 'Calendar Address'")
         ical_url = input("Paste --> ")
         config['ical_url'] = ical_url
@@ -49,6 +49,7 @@ def download(reset=None):
     make_db()
 
     return True
+
 
 download.parser = subparsers.add_parser(
     'download',
@@ -79,11 +80,12 @@ def make_db():
 
     try:
         Event.drop_table()
-    except:
+    except Exception:
         pass
+
     try:
         Event.create_table()
-    except:
+    except Exception:
         pass
 
     with db.atomic():
@@ -95,6 +97,7 @@ def make_db():
     ))
 
     return True
+
 
 make_db.parser = subparsers.add_parser(
     'make_db',
@@ -111,6 +114,7 @@ def shell():
 
     from IPython import embed
     embed()
+
 
 shell.parser = subparsers.add_parser(
     'shell',
@@ -139,6 +143,7 @@ def sql(statement, separator):
     # Data
     for row in cursor.fetchall():
         print(separator.join([str(v) for v in row]))
+
 
 sql.parser = subparsers.add_parser(
     'sql',
@@ -173,6 +178,7 @@ def list_command(filter_re):
         print(event.display())
 
     return True
+
 
 list_command.parser = subparsers.add_parser(
     'list',

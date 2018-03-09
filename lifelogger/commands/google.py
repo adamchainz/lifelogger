@@ -42,6 +42,7 @@ def quickadd(summary):
         sys.stdout.write("Failed :( - status %s\n" % result['status'])
         return False
 
+
 quickadd.parser = subparsers.add_parser(
     'quickadd',
     description="Use 'quick-add' to add an event to your calendar - works the "
@@ -95,6 +96,7 @@ def now(summary, duration):
     else:
         sys.stdout.write("Failed :( - status %s\n" % result['status'])
         return False
+
 
 now.parser = subparsers.add_parser(
     'now',
@@ -150,6 +152,7 @@ def for_command(duration, summary):
     else:
         sys.stdout.write("Failed :( - status %s\n" % result['status'])
         return False
+
 
 for_command.parser = subparsers.add_parser(
     'for',

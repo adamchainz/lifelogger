@@ -1,7 +1,7 @@
 # coding=utf-8
 from __future__ import absolute_import
-from . import local
-from . import google
+
+from . import local, google
 from .parser import parser
 
 

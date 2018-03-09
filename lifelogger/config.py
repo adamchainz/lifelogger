@@ -1,6 +1,6 @@
 # coding=utf-8
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
+
 import json
 import os
 from UserDict import DictMixin
@@ -60,5 +60,6 @@ class ConfigDict(DictMixin, object):
         del self._data[key]
 
         self._save()
+
 
 config = ConfigDict(CONFIG_PATH)

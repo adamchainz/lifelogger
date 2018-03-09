@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
+
 import sys
 
 from oauth2client import client as oa2c_client
@@ -21,7 +21,7 @@ def main():
         successful = func(**kwargs)
         sys.exit(0 if successful else 1)
     except oa2c_client.AccessTokenRefreshError:
-        print("The credentials have been revoked or expired, please re-run" \
+        print("The credentials have been revoked or expired, please re-run"
               "the application to re-authorize")
         sys.exit(1)
 

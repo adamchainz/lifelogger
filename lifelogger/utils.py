@@ -8,15 +8,22 @@ from termcolor import colored
 
 
 if sys.stdout.isatty():
-    blue = lambda x: colored(x, 'blue')
-    pink = lambda x: colored(x, 'magenta')
+    def blue(string):
+        return colored(string, 'blue')
+
+    def ping(string):
+        return colored(string, 'magenta')
 else:
-    blue = lambda x: x
-    pink = lambda x: x
+    def blue(string):
+        return string
+
+    def pink(string):
+        return string
 
 
 def highlight_tags(string):
-    highlight = lambda match: pink(match.group(0))
+    def highlight(match):
+        return pink(match.group(0))
 
     return re.sub(
         r'\#\w+\b',
