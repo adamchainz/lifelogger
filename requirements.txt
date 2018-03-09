@@ -1,6 +1,6 @@
 python-dateutil
 google-api-python-client
 icalendar
-peewee
+peewee<3
 requests
 termcolor
