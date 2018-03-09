@@ -11,7 +11,7 @@ if sys.stdout.isatty():
     def blue(string):
         return colored(string, 'blue')
 
-    def ping(string):
+    def pink(string):
         return colored(string, 'magenta')
 else:
     def blue(string):
