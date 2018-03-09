@@ -3,7 +3,8 @@ from __future__ import absolute_import, print_function
 
 import json
 import os
-from UserDict import DictMixin
+
+from collections import MutableMapping
 
 DATA_PATH = os.path.expanduser("~/.config/lifelogger/")
 CONFIG_PATH = os.path.join(DATA_PATH, "config.json")
@@ -15,7 +16,7 @@ if not os.path.exists(DATA_PATH):
     os.makedirs(DATA_PATH)
 
 
-class ConfigDict(DictMixin, object):
+class ConfigDict(MutableMapping):
 
     def __init__(self, path):
         self._path = path
@@ -60,6 +61,12 @@ class ConfigDict(DictMixin, object):
         del self._data[key]
 
         self._save()
+
+    def __len__(self):
+        return len(self._data)
+
+    def __iter__(self):
+        return iter(self._data)
 
 
 config = ConfigDict(CONFIG_PATH)
